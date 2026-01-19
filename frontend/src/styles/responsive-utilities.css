@@ -1,0 +1,150 @@
+/* Global Responsive Utilities */
+
+/* Container Responsive Padding */
+@media (max-width: 1200px) {
+  .container {
+    padding: 0 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 15px;
+  }
+}
+
+/* Typography Responsive */
+@media (max-width: 1024px) {
+  h1 { font-size: 2.75rem; }
+  h2 { font-size: 2rem; }
+  h3 { font-size: 1.5rem; }
+}
+
+@media (max-width: 768px) {
+  h1 { font-size: 2.25rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.3rem; }
+}
+
+@media (max-width: 576px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.2rem; }
+}
+
+@media (max-width: 400px) {
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.3rem; }
+  h3 { font-size: 1.1rem; }
+}
+
+/* Button Responsive */
+@media (max-width: 768px) {
+  .btn {
+    padding: 12px 24px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .btn {
+    padding: 10px 20px;
+    font-size: 0.85rem;
+  }
+
+  .btn-block {
+    width: 100%;
+  }
+}
+
+/* Grid System Responsive */
+@media (max-width: 1024px) {
+  .grid-4 { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .grid-2, .grid-3, .grid-4 { 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .grid-2, .grid-3, .grid-4 { 
+    grid-template-columns: 1fr; 
+    gap: 1.5rem;
+  }
+}
+
+/* Form Responsive */
+@media (max-width: 576px) {
+  input, select, textarea {
+    padding: 14px 16px;
+    font-size: 0.9rem;
+  }
+
+  .form-group label {
+    font-size: 0.8rem;
+  }
+}
+
+/* Table Responsive */
+@media (max-width: 768px) {
+  table {
+    font-size: 0.9rem;
+  }
+
+  table th,
+  table td {
+    padding: 0.8rem 0.6rem;
+  }
+}
+
+@media (max-width: 576px) {
+  table {
+    font-size: 0.85rem;
+  }
+
+  table th,
+  table td {
+    padding: 0.6rem 0.4rem;
+  }
+}
+
+/* Utility Classes for Responsive Visibility */
+.hide-mobile {
+  display: block;
+}
+
+.show-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+
+  .show-mobile {
+    display: block !important;
+  }
+}
+
+/* Spacing Responsive */
+@media (max-width: 768px) {
+  .my-1 { margin: 0.75rem 0; }
+  .my-2 { margin: 1.5rem 0; }
+  .my-3 { margin: 2rem 0; }
+}
+
+@media (max-width: 576px) {
+  .my-1 { margin: 0.5rem 0; }
+  .my-2 { margin: 1rem 0; }
+  .my-3 { margin: 1.5rem 0; }
+}

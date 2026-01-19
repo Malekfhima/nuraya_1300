@@ -1,0 +1,104 @@
+/* Enhanced Input Validation States */
+input.error,
+select.error,
+textarea.error {
+  border-color: var(--danger);
+  background: #FFF5F5;
+}
+
+input.error:focus,
+select.error:focus,
+textarea.error:focus {
+  box-shadow: 0 4px 12px rgba(155, 44, 44, 0.12), 
+              0 0 0 3px rgba(155, 44, 44, 0.05);
+}
+
+input.success,
+select.success,
+textarea.success {
+  border-color: var(--success);
+  background: #F7FFF5;
+}
+
+input.success:focus,
+select.success:focus,
+textarea.success:focus {
+  box-shadow: 0 4px 12px rgba(56, 118, 29, 0.12), 
+              0 0 0 3px rgba(56, 118, 29, 0.05);
+}
+
+/* Error message styling */
+.error-message {
+  color: var(--danger);
+  font-size: 0.8rem;
+  margin-top: 0.4rem;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.success-message {
+  color: var(--success);
+  font-size: 0.8rem;
+  margin-top: 0.4rem;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* Checkbox and Radio Styling */
+input[type="checkbox"],
+input[type="radio"] {
+  width: auto;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
+/* File Input Styling */
+input[type="file"] {
+  padding: 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+input[type="file"]::file-selector-button {
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  background: var(--surface);
+  color: var(--secondary);
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.3s;
+  margin-right: 12px;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background: var(--secondary);
+  color: var(--surface);
+}
+
+/* Number Input Arrows */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  opacity: 0.5;
+}
+
+/* Search Input Specific */
+input[type="search"] {
+  padding-right: 40px;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 16px;
+  width: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238E8E8E'%3E%3Cpath d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/%3E%3C/svg%3E");
+  cursor: pointer;
+}

@@ -1,0 +1,188 @@
+.placeorder-screen {
+  padding-top: 4rem;
+  padding-bottom: 6rem;
+}
+
+.placeorder-screen .page-title {
+  font-size: 2.5rem;
+  margin-bottom: 4rem;
+  letter-spacing: 0.1em;
+}
+
+.placeorder-layout {
+  display: grid;
+  grid-template-columns: 1.8fr 1.2fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.order-details-section {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.checkout-card {
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  padding: 2.5rem;
+  position: relative;
+}
+
+.checkout-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--primary);
+}
+
+.checkout-card h2 {
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.checkout-card p {
+  color: var(--text-light);
+  line-height: 1.8;
+  margin: 0;
+}
+
+.checkout-card strong {
+  color: var(--secondary);
+}
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.order-item-mini {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.order-item-mini:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.order-item-mini img {
+  width: 70px;
+  height: 80px;
+  object-fit: cover;
+  background: #f7f7f7;
+}
+
+.item-info {
+  flex-grow: 1;
+}
+
+.item-info a {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  color: var(--secondary);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.item-info a:hover {
+  color: var(--primary);
+}
+
+.item-info span {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.item-total-price {
+  font-family: var(--font-heading);
+  color: var(--secondary);
+  font-weight: 500;
+}
+
+.order-summary-card {
+  background: var(--secondary);
+  color: white;
+  padding: 3rem;
+  position: sticky;
+  top: 120px;
+}
+
+.order-summary-card h2 {
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  font-size: 1.6rem;
+}
+
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.summary-line.grand-total {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.btn-place-order {
+  width: 100%;
+  margin-top: 3rem;
+  padding: 1.2rem;
+  background: white;
+  color: var(--secondary);
+  border: none;
+  font-weight: bold;
+  height: auto;
+}
+
+.btn-place-order:hover:not(:disabled) {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-place-order:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.edit-link {
+  font-size: 0.8rem;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-left: auto;
+}
+
+@media (max-width: 1024px) {
+  .placeorder-layout {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .order-summary-card {
+    position: static;
+  }
+}

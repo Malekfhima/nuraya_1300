@@ -1,0 +1,117 @@
+.order-screen {
+  padding-top: 4rem;
+  padding-bottom: 6rem;
+}
+
+.order-screen .page-title {
+  font-size: 2rem;
+  margin-bottom: 4rem;
+  letter-spacing: 0.1em;
+  color: var(--secondary);
+}
+
+.order-id-label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  display: block;
+  margin-top: 0.5rem;
+  font-family: var(--font-body);
+  letter-spacing: 0;
+}
+
+.order-layout {
+  display: grid;
+  grid-template-columns: 1.8fr 1.2fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.order-details-column {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.status-badge {
+  padding: 0.8rem 1.5rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.status-success {
+  background-color: #f6fdf9;
+  color: #1a7f37;
+  border: 1px solid #dafbe1;
+}
+
+.status-danger {
+  background-color: #fff8f8;
+  color: #cf222e;
+  border: 1px solid #ffebe9;
+}
+
+.order-summary-box {
+  background: var(--secondary);
+  color: white;
+  padding: 3rem;
+  position: sticky;
+  top: 120px;
+}
+
+.order-summary-box h2 {
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  font-size: 1.6rem;
+}
+
+.btn-pay {
+  width: 100%;
+  margin-top: 3.5rem;
+  padding: 1.2rem;
+  background: white;
+  color: var(--secondary);
+  border: none;
+  font-weight: bold;
+  font-family: var(--font-heading);
+  letter-spacing: 0.1em;
+}
+
+.btn-pay:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-deliver {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  font-family: var(--font-heading);
+}
+
+.btn-deliver:hover {
+  border-color: white;
+  background: rgba(255,255,255,0.05);
+}
+
+@media (max-width: 1024px) {
+  .order-layout {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .order-summary-box {
+    position: static;
+  }
+}
