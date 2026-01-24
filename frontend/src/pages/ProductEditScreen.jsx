@@ -9,6 +9,7 @@ import "./AuthScreen.css";
 const ProductEditScreen = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const isNewProduct = id === "new";
 
   const { state } = useContext(Store);
   const { userInfo } = state;
@@ -35,8 +36,28 @@ const ProductEditScreen = () => {
       }
     };
 
+    const fetchProductDetails = async () => {
+      try {
+        const { data } = await axios.get(`/api/products/${id}`);
+        setName(data.name);
+        setPrice(data.price);
+        setImage(data.image);
+        setImages(data.images || []);
+        setBrand(data.brand);
+        setCategory(data.category);
+        setCountInStock(data.countInStock);
+        setDescription(data.description);
+      } catch (error) {
+        toast.error("Erreur lors du chargement du produit");
+      }
+    };
+
     fetchCategories();
-  }, []);
+
+    if (!isNewProduct) {
+      fetchProductDetails();
+    }
+  }, [id, isNewProduct]);
 
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
@@ -99,21 +120,24 @@ const ProductEditScreen = () => {
         },
       };
 
-      await axios.put(
-        `/api/products/${id}`,
-        {
-          name,
-          price,
-          image,
-          images,
-          brand,
-          category,
-          description,
-          countInStock,
-        },
-        config,
-      );
-      toast.success("Produit mis à jour");
+      const productData = {
+        name,
+        price,
+        image,
+        images,
+        brand,
+        category,
+        description,
+        countInStock,
+      };
+
+      if (isNewProduct) {
+        await axios.post("/api/products", productData, config);
+        toast.success("Produit créé avec succès");
+      } else {
+        await axios.put(`/api/products/${id}`, productData, config);
+        toast.success("Produit mis à jour");
+      }
       navigate("/admin/products");
     } catch (error) {
       toast.error(error.response?.data?.message || error.message);
@@ -135,7 +159,7 @@ const ProductEditScreen = () => {
           >
             Retour
           </Link>
-          <h2>Modifier le Produit</h2>
+          <h2>{isNewProduct ? "Ajouter un Produit" : "Modifier le Produit"}</h2>
 
           <form onSubmit={submitHandler}>
             <div className="form-group">
@@ -145,6 +169,7 @@ const ProductEditScreen = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Entrez le nom du produit"
+                required
               />
             </div>
 
@@ -155,6 +180,7 @@ const ProductEditScreen = () => {
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 placeholder="Entrez le prix du produit"
+                required
               />
             </div>
 
@@ -165,6 +191,7 @@ const ProductEditScreen = () => {
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
                 placeholder="URL de l'image principale"
+                required
               />
               <input type="file" onChange={uploadFileHandler} />
               {uploading && <div>Téléchargement...</div>}
@@ -227,6 +254,7 @@ const ProductEditScreen = () => {
                   value={brand}
                   onChange={(e) => setBrand(e.target.value)}
                   placeholder="Marque du produit"
+                  required
                 />
               </div>
 
@@ -254,6 +282,7 @@ const ProductEditScreen = () => {
                 value={countInStock}
                 onChange={(e) => setCountInStock(e.target.value)}
                 placeholder="Quantité disponible"
+                required
               />
             </div>
 
@@ -264,11 +293,12 @@ const ProductEditScreen = () => {
                 onChange={(e) => setDescription(e.target.value)}
                 rows="5"
                 placeholder="Décrivez le produit en détail"
+                required
               ></textarea>
             </div>
 
             <button type="submit" className="btn btn-primary btn-block">
-              Mettre à Jour
+              {isNewProduct ? "Créer" : "Mettre à Jour"}
             </button>
           </form>
         </div>

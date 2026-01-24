@@ -94,3 +94,25 @@
   color: var(--primary);
   font-weight: 600;
 }
+
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-toggle-icon {
+  position: absolute;
+  right: 15px;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: color 0.3s;
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  z-index: 2;
+}
+
+.password-toggle-icon:hover {
+  color: var(--primary);
+}

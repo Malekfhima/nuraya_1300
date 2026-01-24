@@ -191,7 +191,7 @@ const PlaceOrderScreen = () => {
             onClick={placeOrderHandler}
             disabled={cart.cartItems.length === 0 || loading}
           >
-            {loading ? "Traitement..." : "Confirmer la commande"}
+            {loading ? "Chargement..." : "Passer la commande"}
           </button>
 
           <p

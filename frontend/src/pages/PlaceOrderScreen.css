@@ -151,16 +151,18 @@
   width: 100%;
   margin-top: 3rem;
   padding: 1.2rem;
-  background: white;
-  color: var(--secondary);
+  background: var(--primary);
+  color: white;
   border: none;
   font-weight: bold;
   height: auto;
+  transition: var(--transition);
 }
 
 .btn-place-order:hover:not(:disabled) {
-  background: var(--primary);
-  color: white;
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
 .btn-place-order:disabled {

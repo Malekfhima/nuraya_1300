@@ -703,3 +703,57 @@ html {
   scrollbar-width: thin;
   scrollbar-color: var(--accent) var(--background);
 }
+
+/* --- Toastify Customization & Responsiveness --- */
+:root {
+  --toastify-color-light: var(--surface);
+  --toastify-color-dark: var(--secondary);
+  --toastify-color-info: var(--info);
+  --toastify-color-success: var(--success);
+  --toastify-color-warning: var(--warning);
+  --toastify-color-error: var(--danger);
+  --toastify-text-color-light: var(--text-main);
+  --toastify-font-family: var(--font-body);
+}
+
+.Toastify__toast {
+  border-radius: var(--radius-medium);
+  font-family: var(--font-body);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-color);
+}
+
+.Toastify__toast-body {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Mobile Responsive Toastify */
+@media only screen and (max-width: 480px) {
+  .Toastify__toast-container {
+    width: 100vw;
+    padding: 0;
+    left: 0;
+    margin: 0;
+    bottom: 0;
+  }
+
+  .Toastify__toast-container--bottom-center,
+  .Toastify__toast-container--bottom-left,
+  .Toastify__toast-container--bottom-right {
+    bottom: 0;
+    transform: none;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+  }
+
+  .Toastify__toast {
+    width: 90%;
+    margin-bottom: 10px;
+    border-radius: var(--radius-medium);
+  }
+}

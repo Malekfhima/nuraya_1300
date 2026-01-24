@@ -92,9 +92,10 @@ const MyOrdersScreen = () => {
                   <tr>
                     <th>ID</th>
                     <th>Date</th>
+                    <th>Produits</th>
                     <th>Total</th>
-                    <th>Payé</th>
-                    <th>Livré</th>
+                    <th>Statut Payé</th>
+                    <th>Statut Livré</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -102,45 +103,56 @@ const MyOrdersScreen = () => {
                   {orders.map((order) => (
                     <tr key={order._id}>
                       <td>{order._id.substring(0, 10)}...</td>
-                      <td>{order.createdAt.substring(0, 10)}</td>
-                      <td>{order.totalPrice.toFixed(2)} DT</td>
+                      <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                      <td>
+                        <div className="order-items-summary">
+                          {order.orderItems.map((item, index) => (
+                            <div key={index} className="mini-item-info">
+                              <img
+                                src={item.image}
+                                alt={item.name}
+                                className="mini-item-img"
+                              />
+                              <span className="mini-item-name">
+                                {item.qty}x {item.name}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </td>
+                      <td>
+                        <strong>{order.totalPrice.toFixed(2)} DT</strong>
+                      </td>
                       <td>
                         {order.isPaid ? (
-                          order.paidAt.substring(0, 10)
+                          <span className="status delivered">
+                            Payé le {new Date(order.paidAt).toLocaleDateString()}
+                          </span>
                         ) : (
-                          <span style={{ color: "red" }}>Non</span>
+                          <span className="status processing">Non Payé</span>
                         )}
                       </td>
                       <td>
                         {order.isDelivered ? (
-                          order.deliveredAt.substring(0, 10)
+                          <span className="status delivered">
+                            Livré le{" "}
+                            {new Date(order.deliveredAt).toLocaleDateString()}
+                          </span>
                         ) : (
-                          <span style={{ color: "red" }}>Non</span>
+                          <span className="status processing">En cours</span>
                         )}
                       </td>
-                      <td style={{ display: "flex", gap: "0.5rem" }}>
+                      <td style={{ display: "flex", gap: "1rem" }}>
                         <Link to={`/order/${order._id}`} className="btn-text">
                           Détails
                         </Link>
-                        {order.isDelivered ? (
+                        {!order.isDelivered && (
                           <button
                             className="btn-text"
-                            style={{ color: "grey", cursor: "not-allowed" }}
-                            onClick={() =>
-                              toast.info(
-                                "Commande confirmée. Veuillez contacter le propriétaire pour toute modification ou suppression.",
-                              )
-                            }
-                          >
-                            Supprimer
-                          </button>
-                        ) : (
-                          <button
-                            className="btn-text"
-                            style={{ color: "red" }}
+                            style={{ color: "var(--danger)" }}
                             onClick={() => deleteHandler(order._id)}
                           >
-                            Supprimer
+                            Annuler
                           </button>
                         )}
                       </td>

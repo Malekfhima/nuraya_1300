@@ -29,6 +29,11 @@ const getCategoryById = asyncHandler(async (req, res) => {
 const createCategory = asyncHandler(async (req, res) => {
   const { name, description } = req.body;
 
+  if (!name || name.trim().length === 0) {
+    res.status(400);
+    throw new Error('Name is required');
+  }
+
   const categoryExists = await Category.findOne({ name });
 
   if (categoryExists) {
@@ -61,7 +66,7 @@ const updateCategory = asyncHandler(async (req, res) => {
     category.name = name || category.name;
     category.description = description || category.description;
 
-    const updatedCategory = await Category.save();
+    const updatedCategory = await category.save();
     res.json(updatedCategory);
   } else {
     res.status(404);

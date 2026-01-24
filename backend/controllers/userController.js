@@ -113,8 +113,23 @@ const registerUser = asyncHandler(async (req, res) => {
       });
     } catch (err) {
       console.error(err);
+      
+      // In development, if email fails, log the code and proceed
+      if (process.env.NODE_ENV !== "production") {
+        console.log(
+          `[DEV MODE] Verification Code for ${user.email}: ${verificationCode}`
+            .yellow.bold
+        );
+        return res.status(201).json({
+          message:
+            "Utilisateur enregistré. (Email échoué en dev, voir la console pour le code)",
+        });
+      }
+
+      // In production, delete the user if email fails so they can retry
+      await User.findByIdAndDelete(user._id);
       res.status(500);
-      throw new Error("Email could not be sent");
+      throw new Error("L'email n'a pas pu être envoyé. Veuillez réessayer.");
     }
   } else {
     res.status(400);

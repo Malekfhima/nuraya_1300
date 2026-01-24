@@ -25,10 +25,9 @@ const addOrderItems = asyncHandler(async (req, res) => {
       totalPrice
     });
 
-    if (orderItems && orderItems.length === 0) {
+    if (!orderItems || orderItems.length === 0) {
       res.status(400);
       throw new Error("No order items");
-      return;
     } else {
       const order = new Order({
         orderItems,
@@ -42,6 +41,16 @@ const addOrderItems = asyncHandler(async (req, res) => {
       });
 
       const createdOrder = await order.save();
+
+      // Update product stocks
+      const Product = require("../models/Product");
+      for (const item of orderItems) {
+        await Product.updateOne(
+          { _id: item.product },
+          { $inc: { countInStock: -item.qty } }
+        );
+      }
+
       console.log("Order created successfully:", createdOrder._id);
       res.status(201).json(createdOrder);
     }
@@ -141,7 +150,9 @@ const getMyOrders = asyncHandler(async (req, res) => {
 // @route   GET /api/orders
 // @access  Private/Admin
 const getOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({}).populate("user", "id name");
+  const orders = await Order.find({})
+    .populate("user", "id name")
+    .sort({ createdAt: -1 });
   res.json(orders);
 });
 
