@@ -66,19 +66,20 @@ const OrderScreen = () => {
     }
   };
 
-  const mockPaymentHandler = async () => {
+  const confirmPaymentHandler = async () => {
     try {
-      // For Cash on Delivery, payment is marked as completed immediately
-      // since the actual payment happens during delivery
+      const isAdvance = order.paymentMethod === "Avance";
       const paymentResult = {
-        id: "COD_" + order._id,
+        id: (isAdvance ? "ADV_" : "COD_") + order._id,
         status: "COMPLETED",
         update_time: new Date().toISOString(),
         email_address: userInfo.email,
       };
       await api.put(`/orders/${order._id}/pay`, paymentResult);
       fetchOrder();
-      toast.success("Paiement effectué avec succès");
+      toast.success(
+        isAdvance ? "Avance confirmée" : "Paiement à la livraison confirmé"
+      );
     } catch (err) {
       toast.error(err.response?.data?.message || err.message);
     }
@@ -111,6 +112,8 @@ const OrderScreen = () => {
         Commande introuvable
       </div>
     );
+
+  const isAdvancePayment = order.paymentMethod === "Avance";
 
   return (
     <div className="container order-screen">
@@ -149,19 +152,24 @@ const OrderScreen = () => {
           </div>
 
           <div className="checkout-card">
-            <h2>Paiement</h2>
+            <h2>Avance</h2>
             <p>
-              <strong>Méthode:</strong> {order.paymentMethod}
+              <strong>Méthode de paiement :</strong> {order.paymentMethod}
             </p>
             {order.isPaid ? (
               <div className="status-badge status-success">
                 <span>
-                  Payée le {new Date(order.paidAt).toLocaleDateString()}
+                  {isAdvancePayment ? "Avance Reçue" : "Payée à la livraison"} le{" "}
+                  {new Date(order.paidAt).toLocaleDateString()}
                 </span>
               </div>
             ) : (
               <div className="status-badge status-danger">
-                <span>En attente de paiement</span>
+                <span>
+                  {isAdvancePayment
+                    ? "En attente de réception de l'avance"
+                    : "En attente de confirmation de l'avance"}
+                </span>
               </div>
             )}
           </div>
@@ -210,13 +218,39 @@ const OrderScreen = () => {
             <span>{(order.totalPrice || 0).toFixed(2)} DT</span>
           </div>
 
-          {!order.isPaid && (
+          {/* Admin Payment Confirmation Button */}
+          {userInfo && userInfo.isAdmin && !order.isPaid && (
             <button
-              className="btn btn-pay uppercase tracking-wide"
-              onClick={mockPaymentHandler}
+              className="btn btn-outline uppercase tracking-wide"
+              style={{
+                width: "100%",
+                marginTop: "1rem",
+                background: "transparent",
+                color: "white",
+                borderColor: "white",
+              }}
+              onClick={confirmPaymentHandler}
             >
-              Payer maintenant
+              {isAdvancePayment
+                ? "Confirmer réception de l'avance"
+                : "Confirmer l'avance reçue"}
             </button>
+          )}
+
+          {/* User Instructions for Advance Payment */}
+          {!userInfo?.isAdmin && !order.isPaid && isAdvancePayment && (
+            <div
+              style={{
+                background: "rgba(255,255,255,0.1)",
+                padding: "1rem",
+                marginTop: "2rem",
+                fontSize: "0.9rem",
+                border: "1px dashed white",
+              }}
+            >
+              Veuillez nous envoyer votre preuve de virement pour que l'admin
+              puisse marquer votre avance comme reçue.
+            </div>
           )}
 
           {userInfo &&

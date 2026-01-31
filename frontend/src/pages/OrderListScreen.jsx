@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import AdminSidebar from "../components/AdminSidebar";
+import AdminLayout from "../components/AdminLayout";
 import { Store } from "../context/StoreContext";
 
 const OrderListScreen = () => {
@@ -35,10 +35,7 @@ const OrderListScreen = () => {
   }, [navigate, userInfo]);
 
   return (
-    <div className="admin-layout">
-      <AdminSidebar activePage="orders" />
-
-      <main className="admin-content">
+    <AdminLayout activePage="orders">
         <header className="admin-header">
           <h1>Commandes</h1>
         </header>
@@ -119,8 +116,7 @@ const OrderListScreen = () => {
             </table>
           </div>
         )}
-      </main>
-    </div>
+    </AdminLayout>
   );
 };
 

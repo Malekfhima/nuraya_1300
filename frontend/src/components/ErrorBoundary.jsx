@@ -25,9 +25,10 @@ class ErrorBoundary extends React.Component {
         <div
           style={{ padding: "50px", textAlign: "center", fontFamily: "serif" }}
         >
-          <h1>Something went wrong.</h1>
+          <h1>Une erreur est survenue.</h1>
           <p>
-            We apologize for the inconvenience. Please try refreshing the page.
+            Nous nous excusons pour le désagrément. Veuillez essayer de
+            rafraîchir la page.
           </p>
           <details
             style={{
@@ -56,7 +57,7 @@ class ErrorBoundary extends React.Component {
               cursor: "pointer",
             }}
           >
-            Clear Cache & Reload
+            Vider le Cache & Recharger
           </button>
         </div>
       );

@@ -67,16 +67,36 @@ const Product = ({ product }) => {
   };
 
   return (
-    <div className="product-card">
+    <div
+      className="product-card"
+      role="article"
+      aria-label={`Produit: ${product.name}`}
+    >
       <div className="product-image-container">
-        <Link to={`/product/${product._id}`}>
+        <Link
+          to={`/product/${product._id}`}
+          aria-label={`Voir les détails du produit ${product.name}`}
+        >
           <img
             src={product.image}
             alt={product.name}
             className="product-image"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/images/placeholder-product.png";
+            }}
           />
         </Link>
-        <button className="wishlist-btn" onClick={addToWishlistHandler}>
+        <button
+          className="wishlist-btn"
+          onClick={addToWishlistHandler}
+          aria-label={
+            isWishlisted
+              ? `Retirer ${product.name} de la liste de souhaits`
+              : `Ajouter ${product.name} à la liste de souhaits`
+          }
+          aria-pressed={isWishlisted}
+        >
           {isWishlisted ? <FaHeart color="#ff4d4f" /> : <FaRegHeart />}
         </button>
       </div>

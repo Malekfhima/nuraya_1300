@@ -131,14 +131,14 @@ const ProfileScreen = () => {
                           {order.isPaid ? (
                             order.paidAt.substring(0, 10)
                           ) : (
-                            <span style={{ color: "red" }}>No</span>
+                            <span style={{ color: "red" }}>Non</span>
                           )}
                         </td>
                         <td>
                           {order.isDelivered ? (
                             order.deliveredAt.substring(0, 10)
                           ) : (
-                            <span style={{ color: "red" }}>No</span>
+                            <span style={{ color: "red" }}>Non</span>
                           )}
                         </td>
                         <td>

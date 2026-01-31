@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FaTrash, FaCheck, FaTimes, FaShoppingBag } from "react-icons/fa";
-import AdminSidebar from "../components/AdminSidebar";
+import AdminLayout from "../components/AdminLayout";
 import { Store } from "../context/StoreContext";
 
 const UserListScreen = () => {
@@ -76,10 +76,8 @@ const UserListScreen = () => {
   };
 
   return (
-    <div className="admin-layout">
-      <AdminSidebar activePage="users" />
-
-      <main className="admin-content">
+    <>
+      <AdminLayout activePage="users">
         <header className="admin-header">
           <h1>Utilisateurs</h1>
         </header>
@@ -118,7 +116,11 @@ const UserListScreen = () => {
                     <td>
                       <button
                         className="action-btn"
-                        style={{ marginRight: "10px", backgroundColor: "#8b7355", color: "white" }}
+                        style={{
+                          marginRight: "10px",
+                          backgroundColor: "#8b7355",
+                          color: "white",
+                        }}
                         onClick={() => openOrdersModal(user)}
                         title="Voir les produits commandés"
                       >
@@ -162,7 +164,8 @@ const UserListScreen = () => {
                       <div key={order._id} className="order-item-card">
                         <div className="order-header-mini">
                           <span>
-                            <strong>Commande:</strong> {order._id.substring(0, 8)}
+                            <strong>Commande:</strong>{" "}
+                            {order._id.substring(0, 8)}
                           </span>
                           <span>
                             {new Date(order.createdAt).toLocaleDateString()}
@@ -193,7 +196,9 @@ const UserListScreen = () => {
                           ))}
                         </div>
                         <div className="order-footer-mini">
-                          <strong>Total: {order.totalPrice.toFixed(2)} DT</strong>
+                          <strong>
+                            Total: {order.totalPrice.toFixed(2)} DT
+                          </strong>
                         </div>
                       </div>
                     ))}
@@ -203,8 +208,7 @@ const UserListScreen = () => {
             </div>
           </div>
         )}
-
-      </main>
+      </AdminLayout>
 
       <style>{`
         .modal-overlay {
@@ -287,7 +291,7 @@ const UserListScreen = () => {
         .status-success { color: green; font-weight: bold; }
         .status-danger { color: red; font-weight: bold; }
       `}</style>
-    </div>
+    </>
   );
 };
 

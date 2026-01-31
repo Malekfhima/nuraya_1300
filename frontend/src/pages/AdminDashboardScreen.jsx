@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaChartLine, FaShoppingCart, FaUsers, FaBox } from "react-icons/fa";
-import AdminSidebar from "../components/AdminSidebar";
+import AdminLayout from "../components/AdminLayout";
 import { Store } from "../context/StoreContext";
 
 const AdminDashboardScreen = () => {
@@ -59,12 +59,9 @@ const AdminDashboardScreen = () => {
   if (!userInfo) return null;
 
   return (
-    <div className="admin-layout">
-      <AdminSidebar activePage="dashboard" />
-
-      <main className="admin-content">
-        <header className="admin-header">
-          <h1>Vue d'ensemble</h1>
+    <AdminLayout activePage="dashboard">
+      <header className="admin-header">
+        <h1>Vue d'ensemble</h1>
           <div className="admin-date">
             {new Date().toLocaleDateString("fr-FR", {
               weekday: "long",
@@ -136,8 +133,7 @@ const AdminDashboardScreen = () => {
             </div>
           </>
         )}
-      </main>
-    </div>
+    </AdminLayout>
   );
 };
 

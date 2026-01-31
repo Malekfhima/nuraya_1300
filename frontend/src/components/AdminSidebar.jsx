@@ -9,6 +9,7 @@ import {
   FaChartBar,
   FaBars,
   FaTimes,
+  FaArrowLeft,
 } from "react-icons/fa";
 import "../pages/AdminDashboard.css";
 
@@ -72,7 +73,7 @@ const AdminSidebar = ({ activePage }) => {
                 onClick={() => setIsOpen(false)}
                 className={activePage === "dashboard" ? "active" : ""}
               >
-                <FaChartLine /> Dashboard
+                <FaChartLine /> Tableau de bord
               </Link>
             </li>
             <li>
@@ -118,6 +119,16 @@ const AdminSidebar = ({ activePage }) => {
                 className={activePage === "users" ? "active" : ""}
               >
                 <FaUsers /> Utilisateurs
+              </Link>
+            </li>
+            <li className="admin-nav-divider" style={{ margin: '1rem 0', borderTop: '1px solid rgba(255,255,255,0.1)' }}></li>
+            <li>
+              <Link
+                to="/"
+                onClick={() => setIsOpen(false)}
+                style={{ color: 'var(--primary)' }}
+              >
+                <FaArrowLeft /> Retour au site
               </Link>
             </li>
           </ul>

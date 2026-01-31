@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
-import AdminSidebar from "../components/AdminSidebar";
+import AdminLayout from "../components/AdminLayout";
 import { Store } from "../context/StoreContext";
 
 const ProductListScreen = () => {
@@ -60,11 +60,8 @@ const ProductListScreen = () => {
   };
 
   return (
-    <div className="admin-layout">
-      <AdminSidebar activePage="products" />
-
-      <main className="admin-content">
-        <header className="admin-header">
+    <AdminLayout activePage="products">
+      <header className="admin-header">
           <h1>Produits</h1>
           <button className="btn btn-primary" onClick={createProductHandler}>
             <FaPlus style={{ marginRight: "10px" }} /> Ajouter un Produit
@@ -115,8 +112,7 @@ const ProductListScreen = () => {
             </table>
           </div>
         )}
-      </main>
-    </div>
+    </AdminLayout>
   );
 };
 

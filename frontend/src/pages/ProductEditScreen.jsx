@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import AdminSidebar from "../components/AdminSidebar";
+import AdminLayout from "../components/AdminLayout";
 import { Store } from "../context/StoreContext";
 import "./AuthScreen.css";
 
@@ -145,9 +145,7 @@ const ProductEditScreen = () => {
   };
 
   return (
-    <div className="admin-layout">
-      <AdminSidebar activePage="products" />
-      <main className="admin-content">
+    <AdminLayout activePage="products">
         <div
           className="auth-card"
           style={{ maxWidth: "800px", margin: "0 auto" }}
@@ -302,8 +300,7 @@ const ProductEditScreen = () => {
             </button>
           </form>
         </div>
-      </main>
-    </div>
+    </AdminLayout>
   );
 };
 

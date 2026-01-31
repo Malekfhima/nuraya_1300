@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useReducer, useState } from "react";
 import api from "../utils/axios";
 import { toast } from "react-toastify";
 import { Store } from "../context/StoreContext";
-import AdminSidebar from "../components/AdminSidebar";
+import AdminLayout from "../components/AdminLayout";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -95,10 +95,7 @@ export default function CategoryListScreen() {
   };
 
   return (
-    <div className="admin-layout">
-      <AdminSidebar activePage="categories" />
-
-      <main className="admin-content">
+    <AdminLayout activePage="categories">
         <header className="admin-header">
           <h1>Catégories</h1>
         </header>
@@ -172,7 +169,6 @@ export default function CategoryListScreen() {
             </table>
           </div>
         )}
-      </main>
-    </div>
+    </AdminLayout>
   );
 }

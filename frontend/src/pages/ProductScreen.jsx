@@ -183,7 +183,7 @@ const ProductScreen = () => {
     }
   };
 
-  if (loading) return <div className="loader">Loading...</div>;
+  if (loading) return <div className="loader">Chargement...</div>;
   if (error) return <div className="error">{error}</div>;
   if (!product) return null;
 

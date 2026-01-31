@@ -15,7 +15,7 @@ import {
 import { Line, Bar } from "react-chartjs-2";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import AdminSidebar from "../components/AdminSidebar";
+import AdminLayout from "../components/AdminLayout";
 import { FaFilePdf, FaChartLine, FaUsers } from "react-icons/fa";
 import { Store } from "../context/StoreContext";
 
@@ -148,10 +148,8 @@ const StatsScreen = () => {
   };
 
   return (
-    <div className="admin-layout">
-      <AdminSidebar activePage="stats" />
-      <main className="admin-content">
-        <header className="admin-header">
+    <AdminLayout activePage="stats">
+      <header className="admin-header">
           <h1>Statistiques Avancées</h1>
           <button className="btn btn-primary" onClick={exportPDF}>
             <FaFilePdf style={{ marginRight: "10px" }} /> Exporter PDF
@@ -212,8 +210,7 @@ const StatsScreen = () => {
             </div>
           </div>
         )}
-      </main>
-    </div>
+    </AdminLayout>
   );
 };
 
