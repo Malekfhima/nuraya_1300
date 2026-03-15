@@ -23,6 +23,8 @@ const ProductEditScreen = () => {
   const [categories, setCategories] = useState([]);
   const [countInStock, setCountInStock] = useState("");
   const [description, setDescription] = useState("");
+  const [isPromoted, setIsPromoted] = useState(false);
+  const [discountPrice, setDiscountPrice] = useState("");
 
   const [uploading, setUploading] = useState(false);
 
@@ -47,6 +49,8 @@ const ProductEditScreen = () => {
         setCategory(data.category);
         setCountInStock(data.countInStock);
         setDescription(data.description);
+        setIsPromoted(data.isPromoted || false);
+        setDiscountPrice(data.discountPrice || "");
       } catch (error) {
         toast.error("Erreur lors du chargement du produit");
       }
@@ -129,6 +133,8 @@ const ProductEditScreen = () => {
         category,
         description,
         countInStock,
+        isPromoted,
+        discountPrice: discountPrice === "" ? 0 : discountPrice,
       };
 
       if (isNewProduct) {
@@ -283,6 +289,31 @@ const ProductEditScreen = () => {
                 required
               />
             </div>
+
+            <div className="form-group">
+              <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                <input
+                  type="checkbox"
+                  checked={isPromoted}
+                  onChange={(e) => setIsPromoted(e.target.checked)}
+                  style={{ width: "auto" }}
+                />
+                Mettre ce produit en promotion
+              </label>
+            </div>
+
+            {isPromoted && (
+              <div className="form-group">
+                <label>Prix en Promotion (DT)</label>
+                <input
+                  type="number"
+                  value={discountPrice}
+                  onChange={(e) => setDiscountPrice(e.target.value)}
+                  placeholder="Entrez le prix remisé"
+                  min="0"
+                />
+              </div>
+            )}
 
             <div className="form-group">
               <label>Description</label>

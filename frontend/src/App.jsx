@@ -25,6 +25,7 @@ import ProductEditScreen from "./pages/ProductEditScreen";
 import OrderListScreen from "./pages/OrderListScreen";
 import UserListScreen from "./pages/UserListScreen";
 import CategoryListScreen from "./pages/CategoryListScreen";
+import PromoCodeListScreen from "./pages/PromoCodeListScreen";
 import PackingSlipScreen from "./pages/PackingSlipScreen";
 import ShippingScreen from "./pages/ShippingScreen";
 import PaymentScreen from "./pages/PaymentScreen";
@@ -199,6 +200,14 @@ function AppContent() {
             element={
               <AdminRoute>
                 <CategoryListScreen />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/promocodes"
+            element={
+              <AdminRoute>
+                <PromoCodeListScreen />
               </AdminRoute>
             }
           />

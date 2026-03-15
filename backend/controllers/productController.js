@@ -20,6 +20,11 @@ const getProducts = asyncHandler(async (req, res) => {
   // Build safe query using the validation utility
   const query = buildSafeQuery(sanitizedQuery);
 
+  // Ajouter le filtre pour n'afficher que les produits actifs (sauf pour les admins)
+  if (!req.user || !req.user.isAdmin) {
+    query.isActive = true;
+  }
+
   const count = await Product.countDocuments(query);
   const products = await Product.find(query)
     .limit(pageSize)
@@ -41,6 +46,11 @@ const getProductById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
   if (product) {
+    // Vérifier si le produit est actif (sauf pour les admins)
+    if (!product.isActive && (!req.user || !req.user.isAdmin)) {
+      res.status(404);
+      throw new Error("Product not found");
+    }
     res.json(product);
   } else {
     res.status(404);
@@ -74,7 +84,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
   // Validate required fields
-  const { name, price, image, brand, category, description, countInStock } =
+  const { name, price, image, brand, category, description, countInStock, isPromoted, discountPrice } =
     req.body;
 
   if (!name || !price || !image || !brand || !category || !description) {
@@ -107,6 +117,8 @@ const createProduct = asyncHandler(async (req, res) => {
       ? req.body.images.map((img) => sanitizeInput(img))
       : [],
     variations: Array.isArray(req.body.variations) ? req.body.variations : [],
+    isPromoted: Boolean(isPromoted),
+    discountPrice: discountPrice ? Number(discountPrice) : 0,
   });
 
   const createdProduct = await product.save();
@@ -127,7 +139,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 
   if (product) {
     // Update only provided fields
-    const { name, price, description, image, brand, category, countInStock } =
+    const { name, price, description, image, brand, category, countInStock, isPromoted, discountPrice } =
       req.body;
 
     if (name !== undefined) product.name = sanitizeInput(name);
@@ -159,6 +171,14 @@ const updateProduct = asyncHandler(async (req, res) => {
       product.variations = Array.isArray(req.body.variations)
         ? req.body.variations
         : product.variations;
+    }
+    if (isPromoted !== undefined) product.isPromoted = Boolean(isPromoted);
+    if (discountPrice !== undefined) {
+      if (isNaN(discountPrice) || discountPrice < 0) {
+        res.status(400);
+        throw new Error("Discount price must be a positive number or zero");
+      }
+      product.discountPrice = Number(discountPrice);
     }
 
     const updatedProduct = await product.save();

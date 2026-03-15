@@ -11,7 +11,7 @@ const PlaceOrderScreen = () => {
   const { cart } = state;
 
   // Calculate prices using useMemo to avoid mutations
-  const { itemsPrice, shippingPrice, taxPrice, totalPrice } = useMemo(() => {
+  const { itemsPrice, shippingPrice, taxPrice, discountAmount, totalPrice } = useMemo(() => {
     const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
     const calculatedItemsPrice = round2(
       cart.cartItems.reduce((a, c) => a + c.qty * c.price, 0),
@@ -19,15 +19,22 @@ const PlaceOrderScreen = () => {
     const calculatedShippingPrice =
       calculatedItemsPrice > 300 ? round2(0) : round2(15);
     const calculatedTaxPrice = round2(0); // TVA removed
-    const calculatedTotalPrice = calculatedItemsPrice + calculatedShippingPrice;
+    
+    // Calculate promo discount
+    const calculatedDiscountAmount = cart.promoCode 
+      ? round2((calculatedItemsPrice * cart.promoCode.discountPercentage) / 100) 
+      : 0;
+
+    const calculatedTotalPrice = calculatedItemsPrice - calculatedDiscountAmount + calculatedShippingPrice;
 
     return {
       itemsPrice: calculatedItemsPrice,
       shippingPrice: calculatedShippingPrice,
       taxPrice: calculatedTaxPrice,
+      discountAmount: calculatedDiscountAmount,
       totalPrice: calculatedTotalPrice,
     };
-  }, [cart.cartItems]);
+  }, [cart.cartItems, cart.promoCode]);
 
   const [loading, setLoading] = useState(false);
 
@@ -44,6 +51,8 @@ const PlaceOrderScreen = () => {
         itemsPrice: itemsPrice,
         shippingPrice: shippingPrice,
         taxPrice: taxPrice,
+        discountAmount: discountAmount,
+        promoCode: cart.promoCode ? cart.promoCode.code : undefined,
         totalPrice: totalPrice,
       });
       ctxDispatch({ type: "CART_CLEAR" });
@@ -139,6 +148,13 @@ const PlaceOrderScreen = () => {
             <span>Sous-total</span>
             <span>{itemsPrice.toFixed(2)} DT</span>
           </div>
+
+          {cart.promoCode && (
+            <div className="summary-line" style={{ color: "#e74c3c" }}>
+              <span>Réduction ({cart.promoCode.code})</span>
+              <span>-{discountAmount.toFixed(2)} DT</span>
+            </div>
+          )}
 
           <div className="summary-line">
             <span>Livraison</span>

@@ -3,6 +3,7 @@ const crypto = require("crypto");
 const User = require("../models/User");
 const generateToken = require("../utils/generateToken");
 const sendEmail = require("../utils/sendEmail");
+const { OAuth2Client } = require("google-auth-library");
 const {
   getVerificationEmail,
   getForgotPasswordEmail,
@@ -118,7 +119,6 @@ const registerUser = asyncHandler(async (req, res) => {
       if (process.env.NODE_ENV !== "production") {
         console.log(
           `[DEV MODE] Verification Code for ${user.email}: ${verificationCode}`
-            .yellow.bold
         );
         return res.status(201).json({
           message:
@@ -454,6 +454,69 @@ const getWishlist = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Authenticate / Register user with Google
+// @route   POST /api/users/google
+// @access  Public
+const googleAuth = asyncHandler(async (req, res) => {
+  const { idToken } = req.body;
+
+  if (!idToken || typeof idToken !== "string") {
+    res.status(400);
+    throw new Error("Missing or invalid idToken");
+  }
+
+  if (!process.env.GOOGLE_CLIENT_ID) {
+    res.status(500);
+    throw new Error("GOOGLE_CLIENT_ID is not configured on the server");
+  }
+
+  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+  let ticket;
+  try {
+    ticket = await client.verifyIdToken({ idToken, audience: process.env.GOOGLE_CLIENT_ID });
+  } catch (err) {
+    res.status(401);
+    throw new Error("Invalid Google ID token");
+  }
+
+  const payload = ticket.getPayload();
+  const email = payload.email;
+  const name = payload.name || "Utilisateur Google";
+
+  if (!email) {
+    res.status(400);
+    throw new Error("Google token did not contain an email");
+  }
+
+  // Either find existing user or create one
+  let user = await User.findOne({ email: email });
+
+  if (user) {
+    // mark verified if not already
+    if (!user.isVerified) {
+      user.isVerified = true;
+      await user.save();
+    }
+  } else {
+    // create a new user with a random password (will be hashed by pre-save hook)
+    const randomPassword = crypto.randomBytes(20).toString("hex");
+    user = await User.create({
+      name: sanitizeInput(name),
+      email: sanitizeInput(email),
+      password: randomPassword,
+      isVerified: true,
+    });
+  }
+
+  res.json({
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin,
+    token: generateToken(user._id),
+  });
+});
+
 module.exports = {
   authUser,
   registerUser,
@@ -467,4 +530,5 @@ module.exports = {
   addToWishlist,
   removeFromWishlist,
   getWishlist,
+  googleAuth,
 };

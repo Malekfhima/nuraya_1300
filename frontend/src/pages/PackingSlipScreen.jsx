@@ -82,27 +82,29 @@ const PackingSlipScreen = () => {
                     </div>
                 </div>
 
-                <table className="ps-table">
-                    <thead>
-                        <tr>
-                            <th>PRODUIT</th>
-                            <th>RÉFÉRENCE</th>
-                            <th className="text-center">QUANTITÉ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {order.orderItems.map((item, index) => (
-                            <tr key={index}>
-                                <td>
-                                    <strong>{item.name}</strong>
-                                    {item.size && <p className="item-detail">Taille: {item.size} cm</p>}
-                                </td>
-                                <td>{item._id.substring(0, 8).toUpperCase()}</td>
-                                <td className="text-center">{item.qty}</td>
+                <div className="table-responsive">
+                    <table className="ps-table">
+                        <thead>
+                            <tr>
+                                <th>PRODUIT</th>
+                                <th>RÉFÉRENCE</th>
+                                <th className="text-center">QUANTITÉ</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {order.orderItems.map((item, index) => (
+                                <tr key={index}>
+                                    <td>
+                                        <strong>{item.name}</strong>
+                                        {item.size && <p className="item-detail">Taille: {item.size} cm</p>}
+                                    </td>
+                                    <td>{item._id.substring(0, 8).toUpperCase()}</td>
+                                    <td className="text-center">{item.qty}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
 
                 <div className="ps-footer">
                     <div className="ps-notes">

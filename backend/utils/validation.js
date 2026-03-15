@@ -140,12 +140,8 @@ const isValidEmail = (email) => {
  */
 const isStrongPassword = (password) => {
   // Minimum 6 characters, at least one letter and one number
-  return newFunction();
-
-  function newFunction() {
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/;
-    return passwordRegex.test(password);
-  }
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/;
+  return passwordRegex.test(password);
 };
 
 module.exports = {

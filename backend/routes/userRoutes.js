@@ -6,6 +6,7 @@ const {
   verifyUser,
   forgotPassword,
   resetPassword,
+  googleAuth,
   getUserProfile,
   updateUserProfile,
   getUsers,
@@ -17,6 +18,7 @@ const {
 const { protect, admin } = require("../middleware/authMiddleware");
 
 router.route("/").post(registerUser).get(protect, admin, getUsers);
+router.post("/google", googleAuth);
 router.post("/login", authUser);
 router.post("/verify", verifyUser);
 router.post("/forgotpassword", forgotPassword);

@@ -30,6 +30,18 @@
   line-height: 1.2;
 }
 
+@media (max-width: 768px) {
+  .product-info-col h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-info-col h1 {
+    font-size: 1.7rem;
+  }
+}
+
 .brand-name {
   text-transform: uppercase;
   letter-spacing: 0.2em;
@@ -56,6 +68,13 @@
   margin-bottom: 2.5rem;
   border-bottom: 1px solid var(--border-color);
   padding-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .price-tag {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
 }
 
 .description {

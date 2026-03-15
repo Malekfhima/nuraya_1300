@@ -27,6 +27,7 @@ const initialState = {
       "paymentMethod",
       "Paiement à la livraison",
     ),
+    promoCode: parseLocalStorage("promoCode", null),
   },
   userInfo: parseLocalStorage("userInfo", null),
 };
@@ -76,6 +77,7 @@ const reducer = (state, action) => {
           cartItems: [],
           shippingAddress: {},
           paymentMethod: "Paiement à la livraison",
+          promoCode: null,
         },
       };
     }
@@ -99,12 +101,27 @@ const reducer = (state, action) => {
         },
       };
     }
+    case "SAVE_PROMO_CODE": {
+      if (action.payload) {
+        localStorage.setItem("promoCode", JSON.stringify(action.payload));
+      } else {
+        localStorage.removeItem("promoCode");
+      }
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          promoCode: action.payload,
+        },
+      };
+    }
     default:
       return state;
   }
 };
 
-export const Store = createContext();
+const Store = createContext();
+export { Store };
 
 export function StoreProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);

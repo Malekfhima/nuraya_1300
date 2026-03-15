@@ -176,6 +176,7 @@
 
 .orders-table {
   width: 100%;
+  min-width: 600px; /* Prevent squashing on mobile */
   border-collapse: collapse;
   margin-top: 1.5rem;
   background: white;

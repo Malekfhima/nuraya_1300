@@ -18,6 +18,12 @@ const reducer = (state, action) => {
       return { ...state, loadingCreate: false };
     case "CREATE_FAIL":
       return { ...state, loadingCreate: false };
+    case "UPDATE_REQUEST":
+      return { ...state, loadingUpdate: true };
+    case "UPDATE_SUCCESS":
+      return { ...state, loadingUpdate: false, successUpdate: true };
+    case "UPDATE_FAIL":
+      return { ...state, loadingUpdate: false, successUpdate: false };
     case "DELETE_REQUEST":
       return { ...state, loadingDelete: true, successDelete: false };
     case "DELETE_SUCCESS":
@@ -33,7 +39,7 @@ export default function CategoryListScreen() {
   const { state } = useContext(Store);
   const { userInfo } = state;
   const [
-    { loading, error, categories, loadingCreate, successDelete },
+    { loading, error, categories, loadingCreate, successDelete, loadingUpdate },
     dispatch,
   ] = useReducer(reducer, {
     loading: true,
@@ -43,6 +49,9 @@ export default function CategoryListScreen() {
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [editingCategory, setEditingCategory] = useState(null);
+  const [editName, setEditName] = useState("");
+  const [editDescription, setEditDescription] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -94,6 +103,38 @@ export default function CategoryListScreen() {
     }
   };
 
+  const startEditHandler = (category) => {
+    setEditingCategory(category);
+    setEditName(category.name);
+    setEditDescription(category.description || "");
+  };
+
+  const cancelEditHandler = () => {
+    setEditingCategory(null);
+    setEditName("");
+    setEditDescription("");
+  };
+
+  const updateHandler = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch({ type: "UPDATE_REQUEST" });
+      await api.put(`/categories/${editingCategory._id}`, { 
+        name: editName, 
+        description: editDescription 
+      });
+      toast.success("Catégorie mise à jour avec succès");
+      dispatch({ type: "UPDATE_SUCCESS" });
+      cancelEditHandler();
+
+      const { data } = await api.get("/categories");
+      dispatch({ type: "FETCH_SUCCESS", payload: data });
+    } catch (err) {
+      toast.error(err.response?.data?.message || err.message);
+      dispatch({ type: "UPDATE_FAIL" });
+    }
+  };
+
   return (
     <AdminLayout activePage="categories">
         <header className="admin-header">
@@ -133,6 +174,51 @@ export default function CategoryListScreen() {
           </form>
         </div>
 
+        {editingCategory && (
+          <div className="report-card-full" style={{ marginBottom: "2rem" }}>
+            <h3 style={{ marginBottom: "1.5rem" }}>Modifier une Catégorie</h3>
+            <form onSubmit={updateHandler} className="admin-form">
+              <div className="grid-2">
+                <div className="form-group">
+                  <label>Nom de la catégorie</label>
+                  <input
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
+                    placeholder="Ex: Montres Classiques"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Description</label>
+                  <input
+                    value={editDescription}
+                    onChange={(e) => setEditDescription(e.target.value)}
+                    placeholder="Brève description..."
+                  />
+                </div>
+              </div>
+              <div style={{ marginTop: "1rem" }}>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{ marginRight: "1rem" }}
+                  disabled={loadingUpdate}
+                >
+                  {loadingUpdate ? "Mise à jour..." : "Mettre à jour"}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={cancelEditHandler}
+                  disabled={loadingUpdate}
+                >
+                  Annuler
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
         {loading ? (
           <p>Chargement...</p>
         ) : error ? (
@@ -155,6 +241,14 @@ export default function CategoryListScreen() {
                     <td>{category.name}</td>
                     <td>{category.description || "-"}</td>
                     <td>
+                      <button
+                        type="button"
+                        className="action-btn btn-edit"
+                        onClick={() => startEditHandler(category)}
+                        style={{ marginRight: "0.5rem" }}
+                      >
+                        Modifier
+                      </button>
                       <button
                         type="button"
                         className="action-btn btn-delete"

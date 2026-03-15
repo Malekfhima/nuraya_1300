@@ -169,21 +169,23 @@
 /* Mobile Styles */
 @media (max-width: 768px) {
   .header-container {
-    padding: 0 20px;
-    flex-wrap: wrap;
-    gap: 10px;
+    padding: 0 15px;
+    flex-wrap: nowrap;
+    gap: 0;
   }
 
   .logo {
     order: 0;
     flex: 1;
-    text-align: center;
-    margin-bottom: 1rem;
+    text-align: left;
+    margin-bottom: 0;
+    font-size: 1.5rem;
   }
 
   .mobile-menu-icon {
     display: block;
-    order: 3;
+    order: 2;
+    margin-left: 0.5rem !important;
   }
 
   /* Navigation Menu - Mobile Transformation */
@@ -229,11 +231,11 @@
 
   /* Header Icons on Mobile */
   .header-icons {
-    gap: 1rem;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    width: 100%;
-    order: 2;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    width: auto;
+    order: 1;
   }
 
   .desktop-search {

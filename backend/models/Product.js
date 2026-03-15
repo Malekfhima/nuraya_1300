@@ -76,6 +76,19 @@ const productSchema = mongoose.Schema(
         options: [String],
       },
     ],
+    isActive: {
+      type: Boolean,
+      required: true,
+      default: true, // Les produits sont actifs par défaut
+    },
+    isPromoted: {
+      type: Boolean,
+      default: false,
+    },
+    discountPrice: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

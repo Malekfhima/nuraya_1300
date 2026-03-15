@@ -114,6 +114,15 @@ const AdminSidebar = ({ activePage }) => {
             </li>
             <li>
               <Link
+                to="/admin/promocodes"
+                onClick={() => setIsOpen(false)}
+                className={activePage === "promocodes" ? "active" : ""}
+              >
+                <FaChartLine /> Codes Promo
+              </Link>
+            </li>
+            <li>
+              <Link
                 to="/admin/users"
                 onClick={() => setIsOpen(false)}
                 className={activePage === "users" ? "active" : ""}

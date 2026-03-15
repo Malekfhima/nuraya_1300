@@ -69,7 +69,7 @@ const UserListScreen = () => {
       const { data } = await axios.get(`/api/orders/user/${user._id}`, config);
       setUserOrders(data);
       setOrdersLoading(false);
-    } catch (err) {
+    } catch {
       toast.error("Impossible de charger les commandes");
       setOrdersLoading(false);
     }

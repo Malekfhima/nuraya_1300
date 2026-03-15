@@ -204,6 +204,13 @@ const OrderScreen = () => {
             <span>{(order.itemsPrice || 0).toFixed(2)} DT</span>
           </div>
 
+          {order.promoCode && (
+            <div className="summary-line" style={{ color: "#e74c3c" }}>
+              <span>Réduction ({order.promoCode})</span>
+              <span>-{(order.discountAmount || 0).toFixed(2)} DT</span>
+            </div>
+          )}
+
           <div className="summary-line">
             <span>Livraison</span>
             <span>

@@ -34,7 +34,7 @@ const Product = ({ product }) => {
     try {
       if (isWishlisted) {
         await api.delete(`/users/wishlist/${product._id}`);
-        toast.success("Retiré de la liste de souhaits");
+        toast.success("Retiré des favoris");
         // Update user info in context
         const updatedWishlist = userInfo.wishlist.filter(
           (id) => id !== product._id,
@@ -48,7 +48,7 @@ const Product = ({ product }) => {
         );
       } else {
         await api.post("/users/wishlist", { productId: product._id });
-        toast.success("Ajouté à la liste de souhaits");
+        toast.success("Ajouté aux favoris");
         // Update user info in context
         const updatedWishlist = [...(userInfo.wishlist || []), product._id];
         localStorage.setItem(
@@ -72,7 +72,12 @@ const Product = ({ product }) => {
       role="article"
       aria-label={`Produit: ${product.name}`}
     >
-      <div className="product-image-container">
+      <div className="product-image-container" style={{ position: "relative" }}>
+        {product.isPromoted && (
+          <div className="promo-badge" style={{ position: 'absolute', top: '10px', left: '10px', backgroundColor: '#e74c3c', color: 'white', padding: '5px 10px', borderRadius: '4px', zIndex: 2, fontSize: '0.8rem', fontWeight: 'bold' }}>
+            Promo
+          </div>
+        )}
         <Link
           to={`/product/${product._id}`}
           aria-label={`Voir les détails du produit ${product.name}`}
@@ -92,8 +97,8 @@ const Product = ({ product }) => {
           onClick={addToWishlistHandler}
           aria-label={
             isWishlisted
-              ? `Retirer ${product.name} de la liste de souhaits`
-              : `Ajouter ${product.name} à la liste de souhaits`
+              ? `Retirer ${product.name} des favoris`
+              : `Ajouter ${product.name} aux favoris`
           }
           aria-pressed={isWishlisted}
         >
@@ -122,7 +127,20 @@ const Product = ({ product }) => {
           })}
           <span className="num-reviews">({product.numReviews})</span>
         </div>
-        <h3 className="product-price">{product.price} DT</h3>
+        <h3 className="product-price">
+          {product.isPromoted ? (
+            <>
+              <span style={{ textDecoration: "line-through", color: "#999", marginRight: "10px", fontSize: "0.9em" }}>
+                {product.price} DT
+              </span>
+              <span style={{ color: "#e74c3c" }}>
+                {product.discountPrice} DT
+              </span>
+            </>
+          ) : (
+            `${product.price} DT`
+          )}
+        </h3>
       </div>
     </div>
   );

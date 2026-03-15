@@ -20,7 +20,7 @@ const ShopScreen = () => {
   // Filters
   const [category, setCategory] = useState('');
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(2000); // Adjusted default range
+  const [maxPrice, setMaxPrice] = useState(2900);
   const [activePriceFilter, setActivePriceFilter] = useState(false);
 
   const [categories, setCategories] = useState([]);
@@ -48,6 +48,12 @@ const ShopScreen = () => {
     const value = Math.max(Number(e.target.value), minPrice + 100);
     setMaxPrice(value);
     setActivePriceFilter(true);
+  };
+
+  const resetPriceFilter = () => {
+    setActivePriceFilter(false);
+    setMinPrice(0);
+    setMaxPrice(2900);
   };
 
   useEffect(() => {
@@ -104,24 +110,36 @@ const ShopScreen = () => {
            </div>
 
            <div className="filter-group">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.8rem' }}>
-                <h3 style={{ margin: 0, border: 'none', padding: 0 }}>Prix</h3>
-                <span className="price-badge">{minPrice} - {maxPrice} DT</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.8rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '1rem' }}>
+                <h3 style={{ 
+                  margin: 0, 
+                  border: 'none', 
+                  padding: 0, 
+                  fontSize: '0.95rem', 
+                  textTransform: 'uppercase', 
+                  letterSpacing: '0.15em', 
+                  fontWeight: '700', 
+                  color: 'var(--secondary)',
+                  fontFamily: 'var(--font-heading)'
+                }}>PRIX</h3>
+                <span className="price-badge">{minPrice}DT - {maxPrice}DT</span>
             </div>
             
             <div className="dual-range-container">
                 <div className="slider-track" style={{
                     background: `linear-gradient(to right, 
-                        var(--accent) ${(minPrice/2000)*100}%, 
-                        var(--primary) ${(minPrice/2000)*100}%, 
-                        var(--primary) ${(maxPrice/2000)*100}%, 
-                        var(--accent) ${(maxPrice/2000)*100}%)`
+                        #e8e8e8 0%, 
+                        #e8e8e8 ${(minPrice/3000)*100}%, 
+                        #2c3e50 ${(minPrice/3000)*100}%, 
+                        #2c3e50 ${(maxPrice/3000)*100}%, 
+                        #e8e8e8 ${(maxPrice/3000)*100}%, 
+                        #e8e8e8 100%)`
                 }}></div>
                 <input 
                     type="range" 
                     min="0" 
-                    max="2000" 
-                    step="50"
+                    max="3000" 
+                    step="10"
                     value={minPrice} 
                     onChange={handleMinChange}
                     className="double-slider min-slider"
@@ -129,24 +147,23 @@ const ShopScreen = () => {
                 <input 
                     type="range" 
                     min="0" 
-                    max="2000" 
-                    step="50"
+                    max="3000" 
+                    step="10"
                     value={maxPrice} 
                     onChange={handleMaxChange}
                     className="double-slider max-slider"
                 />
             </div>
 
-            <div className="range-labels" style={{ marginTop: '1rem' }}>
+            <div className="range-labels">
                 <span>0 DT</span>
-                <span>2000 DT</span>
+                <span>3000 DT</span>
             </div>
 
             {activePriceFilter && (
                 <button 
                   className="btn-text-small" 
-                  onClick={() => { setActivePriceFilter(false); setMinPrice(0); setMaxPrice(2000); }}
-                  style={{ marginTop: '1.5rem', color: 'var(--primary)', cursor: 'pointer', fontSize: '0.85rem', display: 'block' }}
+                  onClick={resetPriceFilter}
                 >
                   Réinitialiser l'intervalle
                 </button>

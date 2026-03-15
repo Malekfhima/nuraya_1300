@@ -17,6 +17,18 @@
   transition: var(--transition);
 }
 
+@media (max-width: 600px) {
+  .auth-card {
+    padding: 3rem 2rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .auth-card {
+    padding: 2.5rem 1.5rem;
+  }
+}
+
 .auth-card:hover {
   box-shadow: var(--shadow-hover);
 }
@@ -115,4 +127,43 @@
 
 .password-toggle-icon:hover {
   color: var(--primary);
+}
+
+/* Google button wrapper styling to match site buttons */
+.google-btn-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+/* Try to style the rendered Google Identity button inside the container */
+.google-btn-wrapper > div {
+  width: 100%;
+  max-width: 260px;
+}
+
+.google-btn-wrapper button {
+  width: 100% !important;
+  border-radius: 6px !important;
+  border: 1px solid var(--border-color) !important;
+  background: var(--surface) !important;
+  color: var(--secondary) !important;
+  padding: 10px 14px !important;
+  box-shadow: none !important;
+  font-weight: 600 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Force LTR inside the button to keep Google text and icon aligned consistently */
+.google-btn-wrapper button, .google-btn-wrapper * {
+  direction: ltr !important;
+}
+
+/* Slightly reduce icon gap if present */
+.google-btn-wrapper svg,
+.google-btn-wrapper img {
+  margin-right: 8px !important;
 }

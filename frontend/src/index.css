@@ -131,6 +131,29 @@ img {
   padding: 0 40px;
 }
 
+@media (max-width: 768px) {
+  .container {
+    padding: 0 20px;
+  }
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1rem;
+}
+
+.table-responsive table {
+  min-width: 650px; /* Standard min-width to prevent squashing */
+}
+
+@media (max-width: 480px) {
+  .table-responsive table {
+    min-width: 600px;
+  }
+}
+
 /* Buttons - Enhanced */
 .btn {
   display: inline-block;
@@ -594,18 +617,19 @@ textarea {
   .grid-3,
   .grid-4 {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
   .container {
     padding: 0 20px;
   }
   h1 {
-    font-size: 2.2rem;
+    font-size: 2rem;
   }
   h2 {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
   }
   h3 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
 
   .btn {

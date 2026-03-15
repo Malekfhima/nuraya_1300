@@ -94,7 +94,13 @@ const ProductScreen = () => {
 
     ctxDispatch({
       type: "CART_ADD_ITEM",
-      payload: { ...product, image: selectedImage || product.image, qty: quantity, size },
+      payload: { 
+        ...product, 
+        price: product.isPromoted ? product.discountPrice : product.price,
+        image: selectedImage || product.image, 
+        qty: quantity, 
+        size 
+      },
     });
     navigate("/cart");
   }, [
@@ -285,7 +291,23 @@ const ProductScreen = () => {
             </div>
             <span>({product.numReviews} avis client)</span>
           </div>
-          <div className="price-tag">{product.price.toFixed(2)} DT</div>
+          <div className="price-tag" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+            {product.isPromoted ? (
+              <>
+                <span style={{ textDecoration: "line-through", color: "#999", fontSize: "1.2rem" }}>
+                  {product.price.toFixed(2)} DT
+                </span>
+                <span style={{ color: "#e74c3c", fontSize: "1.8rem", fontWeight: "bold" }}>
+                  {product.discountPrice.toFixed(2)} DT
+                </span>
+                <span style={{ backgroundColor: "#e74c3c", color: "white", padding: "4px 8px", borderRadius: "4px", fontSize: "0.9rem", fontWeight: "bold" }}>
+                  Promo
+                </span>
+              </>
+            ) : (
+              <span>{product.price.toFixed(2)} DT</span>
+            )}
+          </div>
           <p className="description">{product.description}</p>
 
           <div className="stock-status">

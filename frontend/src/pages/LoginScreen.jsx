@@ -35,11 +35,58 @@ const LoginScreen = () => {
     }
   };
 
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+  const handleCredentialResponse = async (response) => {
+    if (!response?.credential) return;
+    try {
+      const { data } = await api.post("/users/google", { idToken: response.credential });
+      ctxDispatch({ type: "USER_SIGNIN", payload: data });
+      navigate(redirect || "/");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Erreur lors de la connexion Google");
+    }
+  };
+
   useEffect(() => {
     if (userInfo) {
       navigate(redirect);
     }
   }, [navigate, redirect, userInfo]);
+
+  useEffect(() => {
+    const initGoogle = () => {
+      if (!window.google) return;
+      if (!googleClientId) {
+        console.error("VITE_GOOGLE_CLIENT_ID not set");
+        return;
+      }
+      window.google.accounts.id.initialize({
+        client_id: googleClientId,
+        callback: handleCredentialResponse,
+      });
+      window.google.accounts.id.renderButton(document.getElementById("g-btn"), {
+        theme: "outline",
+        size: "large",
+      });
+    };
+
+    if (window.google) {
+      initGoogle();
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = initGoogle;
+    document.body.appendChild(script);
+
+    return () => {
+      if (script && script.parentNode) script.parentNode.removeChild(script);
+    };
+  }, []);
 
   return (
     <div className="auth-container">
@@ -88,6 +135,8 @@ const LoginScreen = () => {
           <button type="submit" className="btn btn-primary btn-block">
             Se connecter
           </button>
+          <div style={{ textAlign: 'center', marginTop: '12px' }}>ou</div>
+          <div id="g-btn" className="google-btn-wrapper" style={{ display: 'flex', justifyContent: 'center', marginTop: '12px' }} />
         </form>
 
         <div className="auth-footer">
