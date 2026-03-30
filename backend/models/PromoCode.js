@@ -19,10 +19,14 @@ const promoCodeSchema = mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    expirationDate: {
+      type: Date,
+      required: false,
+    },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const PromoCode = mongoose.model("PromoCode", promoCodeSchema);

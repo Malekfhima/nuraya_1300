@@ -14,14 +14,16 @@ const getPromoCodes = asyncHandler(async (req, res) => {
 // @route   POST /api/promocodes
 // @access  Private/Admin
 const createPromoCode = asyncHandler(async (req, res) => {
-  const { code, discountPercentage, isActive } = req.body;
+  const { code, discountPercentage, isActive, expirationDate } = req.body;
 
   if (!code || !discountPercentage) {
     res.status(400);
     throw new Error("Code et pourcentage de réduction requis");
   }
 
-  const codeExists = await PromoCode.findOne({ code: sanitizeInput(code).toUpperCase() });
+  const codeExists = await PromoCode.findOne({
+    code: sanitizeInput(code).toUpperCase(),
+  });
   if (codeExists) {
     res.status(400);
     throw new Error("Ce code promo existe déjà");
@@ -31,6 +33,7 @@ const createPromoCode = asyncHandler(async (req, res) => {
     code: sanitizeInput(code).toUpperCase(),
     discountPercentage: Number(discountPercentage),
     isActive: Boolean(isActive ?? true),
+    expirationDate: expirationDate ? new Date(expirationDate) : null,
   });
 
   const createdPromoCode = await promoCode.save();
@@ -41,14 +44,19 @@ const createPromoCode = asyncHandler(async (req, res) => {
 // @route   PUT /api/promocodes/:id
 // @access  Private/Admin
 const updatePromoCode = asyncHandler(async (req, res) => {
-  const { code, discountPercentage, isActive } = req.body;
+  const { code, discountPercentage, isActive, expirationDate } = req.body;
 
   const promoCode = await PromoCode.findById(req.params.id);
 
   if (promoCode) {
     if (code !== undefined) promoCode.code = sanitizeInput(code).toUpperCase();
-    if (discountPercentage !== undefined) promoCode.discountPercentage = Number(discountPercentage);
+    if (discountPercentage !== undefined)
+      promoCode.discountPercentage = Number(discountPercentage);
     if (isActive !== undefined) promoCode.isActive = Boolean(isActive);
+    if (expirationDate !== undefined)
+      promoCode.expirationDate = expirationDate
+        ? new Date(expirationDate)
+        : null;
 
     const updatedPromoCode = await promoCode.save();
     res.json(updatedPromoCode);
@@ -84,15 +92,21 @@ const validatePromoCode = asyncHandler(async (req, res) => {
     throw new Error("Veuillez fournir un code promo");
   }
 
-  const promoCode = await PromoCode.findOne({ code: sanitizeInput(code).toUpperCase() });
+  const promoCode = await PromoCode.findOne({
+    code: sanitizeInput(code).toUpperCase(),
+  });
 
   if (promoCode) {
     if (!promoCode.isActive) {
       res.status(400);
       throw new Error("Ce code promo n'est plus actif");
     }
-    
-    // Si d'autres validations nécessaires (Date etc.) ajoutez-les ici
+
+    // Vérifier la date d'expiration
+    if (promoCode.expirationDate && new Date() > promoCode.expirationDate) {
+      res.status(400);
+      throw new Error("Ce code promo a expiré");
+    }
 
     res.json({
       code: promoCode.code,

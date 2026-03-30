@@ -74,14 +74,17 @@ const ProductScreen = () => {
   }, [id, userInfo]);
 
   useEffect(() => {
-    fetchProduct();
+    setTimeout(() => fetchProduct(), 0);
   }, [fetchProduct]);
 
   const addToCartHandler = useCallback(async () => {
+    if (!product) return;
+
     if (!size) {
       toast.error("Veuillez entrer votre taille en cm");
       return;
     }
+
     const existItem = cart.cartItems.find(
       (x) => x._id === product._id && x.size === size,
     );
@@ -94,12 +97,12 @@ const ProductScreen = () => {
 
     ctxDispatch({
       type: "CART_ADD_ITEM",
-      payload: { 
-        ...product, 
+      payload: {
+        ...product,
         price: product.isPromoted ? product.discountPrice : product.price,
-        image: selectedImage || product.image, 
-        qty: quantity, 
-        size 
+        image: selectedImage || product.image,
+        qty: quantity,
+        size,
       },
     });
     navigate("/cart");
@@ -172,9 +175,7 @@ const ProductScreen = () => {
       if (isWishlisted) {
         await api.delete(`/users/wishlist/${product._id}`);
         toast.success("Retiré de la liste de souhaits");
-        updatedWishlist = userInfo.wishlist.filter(
-          (id) => id !== product._id,
-        );
+        updatedWishlist = userInfo.wishlist.filter((id) => id !== product._id);
       } else {
         await api.post("/users/wishlist", { productId: product._id });
         toast.success("Ajouté à la liste de souhaits");
@@ -183,7 +184,6 @@ const ProductScreen = () => {
 
       const updatedUser = { ...userInfo, wishlist: updatedWishlist };
       ctxDispatch({ type: "USER_SIGNIN", payload: updatedUser });
-      
     } catch (err) {
       toast.error(err.response?.data?.message || err.message);
     }
@@ -223,6 +223,49 @@ const ProductScreen = () => {
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
           >
+            {product.countInStock === 0 && (
+              <div
+                className="sold-out-overlay"
+                style={{
+                  position: "absolute",
+                  top: "10px",
+                  right: "10px",
+                  zIndex: 10,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "8px",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "#dc3545",
+                    color: "white",
+                    padding: "8px 16px",
+                    borderRadius: "6px",
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                    boxShadow: "0 2px 8px rgba(220, 53, 69, 0.3)",
+                  }}
+                >
+                  Sold Out
+                </div>
+                {product.isPromoted && (
+                  <div
+                    style={{
+                      backgroundColor: "#e74c3c",
+                      color: "white",
+                      padding: "6px 12px",
+                      borderRadius: "4px",
+                      fontSize: "0.8rem",
+                      fontWeight: "bold",
+                      boxShadow: "0 2px 8px rgba(231, 76, 60, 0.3)",
+                    }}
+                  >
+                    Promo
+                  </div>
+                )}
+              </div>
+            )}
             <img
               src={selectedImage || product.image}
               alt={product.name}
@@ -291,16 +334,40 @@ const ProductScreen = () => {
             </div>
             <span>({product.numReviews} avis client)</span>
           </div>
-          <div className="price-tag" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <div
+            className="price-tag"
+            style={{ display: "flex", alignItems: "center", gap: "15px" }}
+          >
             {product.isPromoted ? (
               <>
-                <span style={{ textDecoration: "line-through", color: "#999", fontSize: "1.2rem" }}>
+                <span
+                  style={{
+                    textDecoration: "line-through",
+                    color: "#999",
+                    fontSize: "1.2rem",
+                  }}
+                >
                   {product.price.toFixed(2)} DT
                 </span>
-                <span style={{ color: "#e74c3c", fontSize: "1.8rem", fontWeight: "bold" }}>
+                <span
+                  style={{
+                    color: "#e74c3c",
+                    fontSize: "1.8rem",
+                    fontWeight: "bold",
+                  }}
+                >
                   {product.discountPrice.toFixed(2)} DT
                 </span>
-                <span style={{ backgroundColor: "#e74c3c", color: "white", padding: "4px 8px", borderRadius: "4px", fontSize: "0.9rem", fontWeight: "bold" }}>
+                <span
+                  style={{
+                    backgroundColor: "#e74c3c",
+                    color: "white",
+                    padding: "4px 8px",
+                    borderRadius: "4px",
+                    fontSize: "0.9rem",
+                    fontWeight: "bold",
+                  }}
+                >
                   Promo
                 </span>
               </>
@@ -356,10 +423,13 @@ const ProductScreen = () => {
               placeholder="Entrez votre taille en cm"
               value={size}
               onChange={(e) => setSize(e.target.value)}
+              disabled={product.countInStock === 0}
               style={{
                 width: "100%",
                 padding: "10px",
                 border: "1px solid var(--border-color)",
+                opacity: product.countInStock === 0 ? 0.6 : 1,
+                cursor: product.countInStock === 0 ? "not-allowed" : "text",
               }}
             />
           </div>
@@ -370,7 +440,11 @@ const ProductScreen = () => {
           >
             <button
               className="btn btn-primary"
-              style={{ flex: 1 }}
+              style={{
+                flex: 1,
+                opacity: product.countInStock === 0 ? 0.6 : 1,
+                cursor: product.countInStock === 0 ? "not-allowed" : "pointer",
+              }}
               disabled={product.countInStock === 0}
               onClick={addToCartHandler}
             >

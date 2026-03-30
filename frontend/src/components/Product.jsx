@@ -73,9 +73,49 @@ const Product = ({ product }) => {
       aria-label={`Produit: ${product.name}`}
     >
       <div className="product-image-container" style={{ position: "relative" }}>
-        {product.isPromoted && (
-          <div className="promo-badge" style={{ position: 'absolute', top: '10px', left: '10px', backgroundColor: '#e74c3c', color: 'white', padding: '5px 10px', borderRadius: '4px', zIndex: 2, fontSize: '0.8rem', fontWeight: 'bold' }}>
-            Promo
+        {(product.isPromoted || product.countInStock === 0) && (
+          <div
+            className="badges-container"
+            style={{
+              position: "absolute",
+              top: "10px",
+              left: "10px",
+              zIndex: 2,
+              display: "flex",
+              flexDirection: "column",
+              gap: "6px",
+            }}
+          >
+            {product.isPromoted && (
+              <div
+                className="promo-badge"
+                style={{
+                  backgroundColor: "#e74c3c",
+                  color: "white",
+                  padding: "5px 10px",
+                  borderRadius: "4px",
+                  fontSize: "0.8rem",
+                  fontWeight: "bold",
+                }}
+              >
+                Promo
+              </div>
+            )}
+            {product.countInStock === 0 && (
+              <div
+                className="sold-out-badge"
+                style={{
+                  backgroundColor: "#dc3545",
+                  color: "white",
+                  padding: "5px 10px",
+                  borderRadius: "4px",
+                  fontSize: "0.8rem",
+                  fontWeight: "bold",
+                }}
+              >
+                Sold Out
+              </div>
+            )}
           </div>
         )}
         <Link
@@ -130,7 +170,14 @@ const Product = ({ product }) => {
         <h3 className="product-price">
           {product.isPromoted ? (
             <>
-              <span style={{ textDecoration: "line-through", color: "#999", marginRight: "10px", fontSize: "0.9em" }}>
+              <span
+                style={{
+                  textDecoration: "line-through",
+                  color: "#999",
+                  marginRight: "10px",
+                  fontSize: "0.9em",
+                }}
+              >
                 {product.price} DT
               </span>
               <span style={{ color: "#e74c3c" }}>
